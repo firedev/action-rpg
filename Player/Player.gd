@@ -3,14 +3,15 @@ extends KinematicBody2D
 const MAX_SPEED = 100
 const ACCELERATION = 400
 const FRICTION = 400
-
-var velocity = Vector2.ZERO
-
 enum {
 	MOVE, 
 	ROLL,
 	ATTACK,
 }
+
+var velocity = Vector2.ZERO
+
+var state = MOVE
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
@@ -20,8 +21,19 @@ func _ready():
 	animationTree.active=true
 	
 func _physics_process(delta):
-	move_state(delta)
+	match(state):
+		MOVE:
+			move_state(delta)
+		ROLL:
+			roll_state(delta)
+		ATTACK:
+			attack_state(delta)
+func roll_state(delta):
+	return
 	
+func attack_state(delta):
+	return
+
 func move_state(delta):
 	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
