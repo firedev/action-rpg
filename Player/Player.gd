@@ -20,7 +20,7 @@ onready var animationState = animationTree.get("parameters/playback")
 func _ready():
 	animationTree.active=true
 	
-func _physics_process(delta):
+func _process(delta):
 	match(state):
 		MOVE:
 			move_state(delta)
@@ -30,9 +30,17 @@ func _physics_process(delta):
 			attack_state(delta)
 func roll_state(delta):
 	return
+
+func roll_finished():
+	state = MOVE
+
 	
 func attack_state(delta):
-	return
+	velocity = Vector2.ZERO
+	animationState.travel("Attack")
+
+func attack_finished():
+	state = MOVE
 
 func move_state(delta):
 	var input_vector = Vector2.ZERO
@@ -43,11 +51,15 @@ func move_state(delta):
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
 		animationTree.set("parameters/Run/blend_position", input_vector)
+		animationTree.set("parameters/Attack/blend_position", input_vector)
 		velocity = velocity.move_toward(input_vector.normalized() * MAX_SPEED, ACCELERATION * delta)
 		animationState.travel("Run")
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 		animationState.travel("Idle")
+		
+	if Input.is_action_just_pressed("attack"):
+		state = ATTACK
 		
 	velocity = move_and_slide(velocity)
 	
