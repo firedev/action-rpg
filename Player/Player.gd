@@ -15,6 +15,7 @@ var state = MOVE
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
+onready var swordHitbox = $HitboxPivot/SwordHitbox
 onready var animationState = animationTree.get("parameters/playback")
 
 func _ready():
@@ -71,3 +72,4 @@ func move_state(delta):
 		state = ATTACK
 		
 	velocity = move_and_slide(velocity)
+	swordHitbox.knockback_vector = velocity.normalized()
