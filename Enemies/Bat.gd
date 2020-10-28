@@ -15,7 +15,7 @@ func _physics_process(delta):
 		queue_free()
 
 func _on_Hurtbox_area_entered(area):
-	stats.register_hit()
+	stats.register_hit(area.damage)
 	knockback = area.knockback_vector * KNOCKBACK_SPEED
 
 

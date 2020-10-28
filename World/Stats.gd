@@ -8,7 +8,7 @@ func set_health(new_health):
 	if health <= 0:
 		emit_signal("no_health")
 		
-func register_hit():
-	set_health(health - 1)
+func register_hit(damage = 1):
+	set_health(health - damage)
 	
 signal no_health
