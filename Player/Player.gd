@@ -61,7 +61,7 @@ func move_state(delta):
 	if input_vector != Vector2.ZERO:
 		updateAnimationTrees(input_vector)	
 		velocity = velocity.move_toward(input_vector.normalized() * MAX_SPEED, ACCELERATION * delta)
-		
+		swordHitbox.knockback_vector = velocity.normalized()
 		if Input.is_action_just_pressed("roll"):
 			state = ROLL
 		animationState.travel("Run")
@@ -73,4 +73,3 @@ func move_state(delta):
 		state = ATTACK
 		
 	velocity = move_and_slide(velocity)
-	swordHitbox.knockback_vector = velocity.normalized()
