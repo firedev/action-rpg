@@ -14,6 +14,7 @@ var velocity = Vector2.ZERO
 
 var state = MOVE
 
+onready var playerStats = $"/root/PlayerStats"
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var swordHitbox = $HitboxPivot/SwordHitbox
