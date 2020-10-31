@@ -12,6 +12,7 @@ var dead = false
 onready var stats = $Stats
 onready var playerDetectionZone = $PlayerDetectionZone
 onready var sprite = $Bat
+onready var hurtbox = $Hurtbox
 
 const Effect = preload("res://Effects/EnemyDeathEffect.tscn")
 
@@ -60,6 +61,7 @@ func seek_player():
 func _on_Hurtbox_area_entered(area):
 	stats.register_hit(area.damage)
 	knockback = area.knockback_vector * KNOCKBACK_SPEED
+	hurtbox.create_hit_effect()
 
 
 func _on_Stats_no_health():

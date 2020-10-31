@@ -14,13 +14,15 @@ var velocity = Vector2.ZERO
 
 var state = MOVE
 
-onready var playerStats = $"/root/PlayerStats"
+onready var stats = PlayerStats
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var swordHitbox = $HitboxPivot/SwordHitbox
+onready var hurtbox = $Hurtbox
 onready var animationState = animationTree.get("parameters/playback")
 
 func _ready():
+	stats.connect("no_health", self, "queue_free")
 	updateAnimationTrees(Vector2.RIGHT)
 	animationTree.active=true
 	
@@ -74,3 +76,9 @@ func move_state(delta):
 		state = ATTACK
 		
 	velocity = move_and_slide(velocity)
+
+
+func _on_Hurtbox_area_entered(area):
+	stats.health -= area.damage
+	hurtbox.start_invincibility(1)
+	hurtbox.create_hit_effect()
