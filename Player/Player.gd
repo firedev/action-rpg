@@ -22,7 +22,7 @@ onready var hurtbox = $Hurtbox
 onready var animationState = animationTree.get("parameters/playback")
 
 func _ready():
-	stats.connect("no_health", self, "queue_free")
+	stats.connect("no_hearts", self, "queue_free")
 	updateAnimationTrees(Vector2.RIGHT)
 	animationTree.active=true
 	
@@ -79,6 +79,6 @@ func move_state(delta):
 
 
 func _on_Hurtbox_area_entered(area):
-	stats.health -= area.damage
+	stats.register_hit(area.damage)
 	hurtbox.start_invincibility(1)
 	hurtbox.create_hit_effect()

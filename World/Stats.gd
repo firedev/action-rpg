@@ -1,16 +1,19 @@
 extends Node
 
-export var max_health = 1
-onready var health = max_health setget set_health
+export var max_hearts : int = 1
+var hearts : int setget set_hearts
 
-func set_health(new_health):
-	health = new_health
-	emit_signal("health_changed")
-	if health <= 0:
-		emit_signal("no_health")
+func set_hearts(new_hearts):
+	hearts = new_hearts
+	emit_signal("hearts_changed", hearts)
+	if hearts <= 0:
+		emit_signal("no_hearts")
 		
 func register_hit(damage = 1):
-	set_health(health - damage)
+	set_hearts(hearts - damage)
 	
-signal no_health
-signal health_changed
+func _ready():
+	self.hearts = max_hearts
+	
+signal no_hearts
+signal hearts_changed(value)
