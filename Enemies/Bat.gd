@@ -13,6 +13,7 @@ onready var stats = $Stats
 onready var playerDetectionZone = $PlayerDetectionZone
 onready var sprite = $Bat
 onready var hurtbox = $Hurtbox
+onready var softCollision = $SoftColliision
 
 const Effect = preload("res://Effects/EnemyDeathEffect.tscn")
 
@@ -52,6 +53,8 @@ func _physics_process(delta):
 	
 		WANDER:
 			pass
+	if softCollision.is_colliding():
+		velocity += softCollision.get_push_vector() * delta * KNOCKBACK_SPEED * 2
 	velocity = move_and_slide(velocity)
 
 func seek_player():
