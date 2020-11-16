@@ -13,7 +13,8 @@ onready var stats = $Stats
 onready var playerDetectionZone = $PlayerDetectionZone
 onready var sprite = $Bat
 onready var hurtbox = $Hurtbox
-onready var softCollision = $SoftColliision
+onready var softCollision = $SoftCollision
+onready var wanderController = $WanderController
 
 const Effect = preload("res://Effects/EnemyDeathEffect.tscn")
 
@@ -42,17 +43,26 @@ func _physics_process(delta):
 		IDLE:
 			velocity = knockback.move_toward(Vector2.ZERO, FRICTION * delta)
 			seek_player()
+			if wanderController.get_time_left() == 0:
+				state = pick_random_state([IDLE, WANDER])
+				wanderController.start_wander_timer(rand_range(1,3))
+
+		WANDER:
+			seek_player()
+			if wanderController.get_time_left() == 0:
+				state = pick_random_state([IDLE, WANDER])
+				wanderController.start_wander_timer(rand_range(1,3))
+			var direction = global_position.direction_to(wanderController.target_position)
+			velocity =  velocity.move_toward(direction * MAX_SPEED, ACCELERATION * delta)
 		CHASE:
 			var player = playerDetectionZone.player
 			if player != null:
-				var direction = (player.global_position - global_position).normalized()
+				var direction = global_position.direction_to(player.global_position)
 				velocity =  velocity.move_toward(direction * MAX_SPEED, ACCELERATION * delta)
 			else:
 				state = IDLE
 			sprite.flip_h = velocity.x < 0
-	
-		WANDER:
-			pass
+
 	if softCollision.is_colliding():
 		velocity += softCollision.get_push_vector() * delta * KNOCKBACK_SPEED * 2
 	velocity = move_and_slide(velocity)
@@ -60,12 +70,15 @@ func _physics_process(delta):
 func seek_player():
 	if playerDetectionZone.can_see_player():
 		state = CHASE
-			
+
 func _on_Hurtbox_area_entered(area):
 	stats.register_hit(area.damage)
 	knockback = area.knockback_vector * KNOCKBACK_SPEED
 	hurtbox.create_hit_effect()
 
+func pick_random_state(state_list):
+	state_list.shuffle()
+	return state_list.pop_front()
 
 func _on_Stats_no_hearts():
 	dead = true

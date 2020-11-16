@@ -8,6 +8,7 @@
 [ext_resource path="res://Enemies/PlayerDetectionZone.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Boxes/Hitbox.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Boxes/SoftCollision.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Enemies/WanderController.tscn" type="PackedScene" id=9]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
@@ -52,9 +53,6 @@ radius = 61.0082
 radius = 4.67399
 height = 0.0
 
-[sub_resource type="CircleShape2D" id=11]
-radius = 8.19277
-
 [node name="Bat" type="KinematicBody2D"]
 collision_layer = 16
 script = ExtResource( 4 )
@@ -63,7 +61,7 @@ script = ExtResource( 4 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "Fly"
-frame = 2
+frame = 1
 playing = true
 
 [node name="SmallShadow" type="Sprite" parent="."]
@@ -97,10 +95,9 @@ collision_mask = 4
 position = Vector2( 0, -12.3744 )
 shape = SubResource( 10 )
 
-[node name="SoftColliision" parent="." instance=ExtResource( 8 )]
+[node name="SoftCollision" parent="." instance=ExtResource( 8 )]
 
-[node name="CollisionShape2D" parent="SoftColliision" index="0"]
-shape = SubResource( 11 )
+[node name="WanderController" parent="." instance=ExtResource( 9 )]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 [connection signal="no_hearts" from="Stats" to="." method="_on_Stats_no_hearts"]
 
@@ -109,5 +106,3 @@ shape = SubResource( 11 )
 [editable path="PlayerDetectionZone"]
 
 [editable path="Hitbox"]
-
-[editable path="SoftColliision"]
