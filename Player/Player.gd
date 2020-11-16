@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+const PlayerHurtSound = preload("res://Player/PlayerHurtSound.tscn")
+
 export var MAX_SPEED = 100
 export var ACCELERATION = 400
 export var FRICTION = 400
@@ -13,6 +15,8 @@ enum {
 var velocity = Vector2.ZERO
 
 var state = MOVE
+
+
 
 onready var stats = PlayerStats
 onready var animationPlayer = $AnimationPlayer
@@ -31,11 +35,11 @@ func _process(delta):
 		MOVE:
 			move_state(delta)
 		ROLL:
-			roll_state(delta)
+			roll_state()
 		ATTACK:
 			attack_state(delta)
 			
-func roll_state(delta):
+func roll_state():
 	animationState.travel("Roll")
 	velocity = move_and_slide(velocity.normalized() * MAX_SPEED)
 
@@ -82,3 +86,5 @@ func _on_Hurtbox_area_entered(area):
 	stats.register_hit(area.damage)
 	hurtbox.start_invincibility(1)
 	hurtbox.create_hit_effect()
+	var playerHurtSound = PlayerHurtSound.instance()
+	get_tree().current_scene.add_child(playerHurtSound)

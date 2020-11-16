@@ -61,7 +61,7 @@ script = ExtResource( 4 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "Fly"
-frame = 1
+frame = 2
 playing = true
 
 [node name="SmallShadow" type="Sprite" parent="."]
