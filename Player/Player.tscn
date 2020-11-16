@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=2]
+[gd_scene load_steps=60 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Player/Player.png" type="Texture" id=2]
@@ -8,6 +8,11 @@
 [ext_resource path="res://Shadows/MediumShadow.png" type="Texture" id=6]
 [ext_resource path="res://Music and Sounds/Swipe.wav" type="AudioStream" id=7]
 [ext_resource path="res://Music and Sounds/Evade.wav" type="AudioStream" id=8]
+[ext_resource path="res://WhiteColor.shader" type="Shader" id=9]
+
+[sub_resource type="ShaderMaterial" id=49]
+shader = ExtResource( 9 )
+shader_param/active = false
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 4.0
@@ -588,6 +593,39 @@ tracks/0/keys = {
 "values": [ 7, 8, 9, 10, 11, 6 ]
 }
 
+[sub_resource type="Animation" id=50]
+resource_name = "Start"
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Player:material:shader_param/active")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[sub_resource type="Animation" id=51]
+resource_name = "Stop"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Player:material:shader_param/active")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+
 [sub_resource type="AnimationNodeAnimation" id=18]
 animation = "AttackLeft"
 
@@ -731,6 +769,7 @@ position = Vector2( -1, 3 )
 texture = ExtResource( 6 )
 
 [node name="Player" type="Sprite" parent="."]
+material = SubResource( 49 )
 position = Vector2( 0, -8 )
 texture = ExtResource( 2 )
 hframes = 60
@@ -757,6 +796,10 @@ anims/RunDown = SubResource( 14 )
 anims/RunLeft = SubResource( 15 )
 anims/RunRight = SubResource( 16 )
 anims/RunUp = SubResource( 17 )
+
+[node name="BlinkAnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Start = SubResource( 50 )
+anims/Stop = SubResource( 51 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 44 )
@@ -790,6 +833,8 @@ shape = SubResource( 47 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+[connection signal="invincibility_ended" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_ended"]
+[connection signal="invincibility_started" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_started"]
 
 [editable path="HitboxPivot/SwordHitbox"]
 

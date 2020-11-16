@@ -17,6 +17,7 @@ onready var sprite = $Bat
 onready var hurtbox = $Hurtbox
 onready var softCollision = $SoftCollision
 onready var wanderController = $WanderController
+onready var blinkAnimationPlayer = $BlinkAnimationPlayer
 
 const Effect = preload("res://Effects/EnemyDeathEffect.tscn")
 
@@ -38,7 +39,7 @@ func create_effect():
 func _physics_process(delta):
 	knockback = knockback.move_toward(Vector2.ZERO, FRICTION * delta)
 	knockback = move_and_slide(knockback)
-	if (knockback == Vector2.ZERO && dead): 
+	if (dead): 
 		create_effect()
 		queue_free()
 	
@@ -84,6 +85,7 @@ func _on_Hurtbox_area_entered(area):
 	stats.register_hit(area.damage)
 	knockback = area.knockback_vector * KNOCKBACK_SPEED
 	hurtbox.create_hit_effect()
+	hurtbox.start_invincibility(0.4)
 
 func randomize_behavior():
 	state = pick_random_state([ IDLE, WANDER ])
@@ -95,3 +97,10 @@ func pick_random_state(state_list):
 
 func _on_Stats_no_hearts():
 	dead = true
+
+
+func _on_Hurtbox_invincibility_ended():
+	blinkAnimationPlayer.play("Stop")
+
+func _on_Hurtbox_invincibility_started():
+	blinkAnimationPlayer.play("Start")
