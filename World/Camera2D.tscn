@@ -3,7 +3,7 @@
 [ext_resource path="res://World/Camera2D.gd" type="Script" id=1]
 
 [node name="Camera2D" type="Camera2D"]
-position = Vector2( 160, 95 )
+position = Vector2( 160, 96 )
 current = true
 process_mode = 0
 smoothing_enabled = true
@@ -15,4 +15,4 @@ script = ExtResource( 1 )
 position = Vector2( 1.52588e-05, 7.62939e-06 )
 
 [node name="BottomRight" type="Position2D" parent="Limits"]
-position = Vector2( 320, 191 )
+position = Vector2( 320, 192 )
